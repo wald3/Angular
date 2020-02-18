@@ -1,0 +1,18 @@
+<form #form="ngForm" autocomplete="off">
+
+  <div class="form-group">
+    <label>Username</label>
+    <input class="form-control" #UserName="ngModel" name="UserName" [(ngModel)]="formModel.UserName" required/>
+  </div>
+  <div class="form-group">
+    <label>Password</label>
+    <input type="password" class="form-control"   #UserName="ngModel" name="Password" [(ngModel)]="formModel.Password" required/>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group col-mb-8 offset-mb-2">
+      <button type="submit" class="btn bt-lg btn-block" [disabled]="!form.valid">Login</button>
+    </div>
+  </div>
+
+</form>
