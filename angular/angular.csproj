@@ -26,9 +26,17 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="ClientApp\src\app\shared\user.service.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="AdoNetAppSchemaTest">
       <HintPath>..\..\AdoNetAppSchemaTest\AdoNetAppSchemaTest\bin\Debug\netcoreapp2.1\AdoNetAppSchemaTest.dll</HintPath>
     </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\src\app\shared\user.service.ts" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
