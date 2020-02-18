@@ -1,38 +1,49 @@
-<form #form="ngForm" autocomplete="off" (submit)="onSubmit(form)">
+<form [formGroup]="userService.formModel" autocomplete="off" (submit)="onSubmit(formModel)">
 
-  <div class="form-group">
+  <div class="form-group required">
     <label>Email</label>
-    <input class="form-control" #UserName="ngModel" name="Email" [(ngModel)]="formModel.Email" required />
+    <input class="form-control" formControlName="Email" />
   </div>
-  <div class="form-group">
+  <div class="form-group required">
     <label>Username</label>
-    <input class="form-control" #UserName="ngModel" name="UserName" [(ngModel)]="formModel.UserName" required />
+    <input class="form-control" formControlName="UserName" />
   </div>
-  <div class="form-group">
+  <div class="form-group required">
     <label>FirstName</label>
-    <input class="form-control" #UserName="ngModel" name="FirstName" [(ngModel)]="formModel.FirstName" required />
+    <input class="form-control" formControlName="FirstName" />
   </div>
-  <div class="form-group">
+  <div class="form-group required">
     <label>SecondName</label>
-    <input class="form-control" #UserName="ngModel" name="SecondName" [(ngModel)]="formModel.SecondName" required />
+    <input class="form-control" formControlName="SecondName" />
   </div>
-  <div class="form-group">
+  <div class="form-group required">
     <label>LastName</label>
-    <input class="form-control" #UserName="ngModel" name="LastName" [(ngModel)]="formModel.LastName" required />
+    <input class="form-control" formControlName="LastName" />
   </div>
-  <div class="form-group">
-    <label>Password</label>
-    <input type="password" class="form-control" #UserName="ngModel" name="Password" [(ngModel)]="formModel.Password" required />
+  <div formGroupName="Passwords">
+    <div class="form-group required">
+      <label>Password</label>
+      <input type="password" class="form-control" formControlName="Password" />
+    </div>
+    <div class="form-group required">
+      <label>Password confirmation</label>
+      <input type="password" class="form-control" formControlName="ConfirmPassword" />
+    </div>
   </div>
-  <div class="form-group">
-    <label>Password confirmation</label>
-    <input type="password" class="form-control" #UserName="ngModel" name="PasswordConfirmation" [(ngModel)]="formModel.PasswordConfirmation" required />
+  <div *ngFor="let r of roles">
+    <label class="check-box-label">
+      <input type="checkbox" [value]="r" (change)="onCheckboxChange($event)" />
+      {{r}}
+    </label>
   </div>
 
   <div class="form-row">
     <div class="form-group col-mb-8 offset-mb-2">
-      <button type="submit" class="btn bt-lg btn-block" [disabled]="!form.valid">Login</button>
+      <button type="submit" class="btn bt-lg btn-block" [disabled]="!userService.formModel.valid">Login</button>
     </div>
   </div>
 
 </form>
+
+
+

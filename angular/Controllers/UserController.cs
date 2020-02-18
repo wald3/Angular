@@ -6,6 +6,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using AdoNetAppSchemaTest.DAL;
+using AdoNetTestApp.DAL.Models;
 using angular.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -16,19 +17,50 @@ namespace angular.Controllers
     [Route("api/[controller]")]
     public class UserController : Controller
     {
+        private DbContext _context;
         private UserManager _userManager;
+        private RoleManager _roleManager;
         private readonly AppSettings _settings;
 
-        public UserController(UserManager userManager, IOptions<AppSettings> settings)
+        public UserController(IOptions<AppSettings> settings)
         {
-            _userManager = userManager;
+            _context = new DbContext();
+            _userManager = new UserManager(_context);
+            _roleManager = new RoleManager(_context);
             _settings = settings.Value;
         }
 
-        [HttpPost]
-        [Route("Login")]
+        [HttpGet("[action]")]
+        // Get: api/User/GetRoles
+        public IEnumerable<string> GetRoles()
+        {
+            return _roleManager.GetAllRoles();
+        }
+
+
+        [HttpPost("[action]")]
+        // POST: api/User/Registration
+        public object Registration([FromBody]RegistrationModel model)
+        {
+            var user = new User
+            {
+                UserName = model.UserName,
+                FirstName = model.FirstName,
+                SecondName = model.SecondName,
+                LastName = model.LastName,
+                Password = model.Password,
+                Email = model.Email,
+                RegistrationDate = DateTime.UtcNow.ToString()
+            };
+            var isCreated = _userManager.CreateUser(user);
+
+            if (isCreated) return Ok(_userManager.GetByEmail(user.Email));
+            return BadRequest(new { message = "User already exists" });
+        }
+
+        [HttpPost("[action]")]
         // POST: api/User/Login
-        public IActionResult Login(LoginModel model)
+        public IActionResult Login([FromBody]LoginModel model)
         {
             var user = _userManager.GetByEmail(model.Email);
             if (user != null && _userManager.CheckPassword(user, model.Password))
