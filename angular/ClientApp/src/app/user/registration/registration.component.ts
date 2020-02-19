@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../shared/user.service';
 import { FormGroup, FormBuilder, FormArray, FormControl, Validators, ReactiveFormsModule} from '@angular/forms';
+import { type } from 'os';
 
 @Component({
   selector: 'registration',
@@ -9,6 +10,7 @@ import { FormGroup, FormBuilder, FormArray, FormControl, Validators, ReactiveFor
 })
 export class RegistrationComponent implements OnInit{
   roles: string[] = [];
+  public isRolesValid: boolean = true;
   rolesForm: FormGroup;
 
   constructor(public userService: UserService, private fb: FormBuilder) {
@@ -27,7 +29,10 @@ export class RegistrationComponent implements OnInit{
 
   onSubmit() {
     console.log('registration submitted');
-    console.log(this.rolesForm.value);
+    this.userService.formModel.controls['Roles'].setValue(this.rolesForm.value);
+    this.userService.SignUpUser();
+    //console.log('Roles:', this.userService.formModel.get('Roles').value);
+    //console.log('roles:', this.rolesForm.value);
   }
 
   onCheckboxChange(e) {

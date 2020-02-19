@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { NgForm, FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { NgForm, FormBuilder, Validators, FormGroup, FormControlName } from '@angular/forms';
 //import { User } from './user.model';
 //import { UserSignUp } from './user.singup.model';
 
@@ -21,12 +21,14 @@ export class UserService {
       Password: ['', [Validators.required, Validators.minLength(6)]],
       ConfirmPassword: ['', Validators.required]
     }, {validator: this.comparePasswords }),
-    Roles: [[], { validator: this.roleChecks }]
+    Roles: [[]]
   });
 
-  roleChecks(fb: FormGroup) {
-    //let 
-  }
+  //rolesCheck(fb: FormGroup) {
+  //  let a = fb.get('Roles');
+  
+  //  console.log('userService/roles:', a);
+  //}
 
   comparePasswords(fb: FormGroup) {
     let confirmedPassword = fb.get('ConfirmPassword');
@@ -47,10 +49,22 @@ export class UserService {
     return this.http.get(this.url);
   }
 
-  SignUpUser(user: NgForm) {
-    return this.http.post(this.url, user);
+  // register
+  SignUpUser() {
+    var body = {
+      Email: this.formModel.value.Email,
+      UserName: this.formModel.value.UserName,
+      FirstName: this.formModel.value.FirstName,
+      SecondName: this.formModel.value.SecondName,
+      LastName: this.formModel.value.LastName,
+      Password: this.formModel.value.Passwords.Password,
+      Roles: this.formModel.value.Roles
+    }
+    console.log(body);
+    return this.http.post(this.url + '/registration', body);
   }
 
+  // login
   SignInUser(user: NgForm) {
     return this.http.post(this.url, user);
   }

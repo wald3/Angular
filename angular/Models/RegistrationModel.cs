@@ -13,6 +13,6 @@ namespace angular.Models
         public string SecondName { get; set; }
         public string LastName { get; set; }
         public string Password { get; set; }
-        public string PasswordConfiramation { get; set; }
+        public IEnumerable<string> Roles { get; set; }
     }
 }

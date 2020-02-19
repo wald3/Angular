@@ -58,16 +58,19 @@
       </label>
     </div>
   </div>
-  <div *ngFor="let r of roles">
-    <label class="check-box-label">
-      <input type="checkbox" [value]="r" (change)="onCheckboxChange($event)" />
-      {{r}}
-    </label>
+  <div formGroupName="Roles">
+    <div *ngFor="let r of roles">
+      <label class="check-box-label">
+        <input type="checkbox" [value]="r" (change)="onCheckboxChange($event)" />
+        {{r}}
+      </label>
+    </div>
   </div>
+  <label *ngIf="!isRolesValid" class="text-danger">User must have 1 or more roles</label>
 
   <div class="form-row">
     <div class="form-group col-mb-8 offset-mb-2">
-      <button type="submit" class="btn bt-lg btn-block">Login</button>
+      <button type="submit" class="btn bt-lg btn-block" [disabled]="userService.formModel.invalid">Login</button>
     </div>
   </div>
 

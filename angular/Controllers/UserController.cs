@@ -37,6 +37,13 @@ namespace angular.Controllers
             return _roleManager.GetAllRoles();
         }
 
+        [HttpGet("[action]")]
+        // Get: api/User/GetUsers
+        public IEnumerable<User> GetUsers()
+        {
+            return _userManager.GetAllUsers();
+        }
+
 
         [HttpPost("[action]")]
         // POST: api/User/Registration
@@ -54,7 +61,11 @@ namespace angular.Controllers
             };
             var isCreated = _userManager.CreateUser(user);
 
-            if (isCreated) return Ok(_userManager.GetByEmail(user.Email));
+            if (isCreated)
+            {
+                _userManager.AddToRoles(user.Email, model.Roles.ToList());
+                return Ok(_userManager.GetByEmail(user.Email));
+            }
             return BadRequest(new { message = "User already exists" });
         }
 
