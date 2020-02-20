@@ -1,5 +1,5 @@
-  /* You can add global styles to this file, and also import other style files */
-  /* You can add global styles to this file, and also import other style files */
+
+
   body {
     background-color: #04c582 !important;
   }
@@ -102,3 +102,9 @@
     text-transform: uppercase;
     font-size: 1.5rem;
   }
+
+.home-page {
+  margin: 0 auto;
+  text-transform: uppercase;
+  font-size: 5rem;
+}

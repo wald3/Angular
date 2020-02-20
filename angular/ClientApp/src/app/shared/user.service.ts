@@ -1,17 +1,22 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { NgForm, FormBuilder, Validators, FormGroup, FormControlName } from '@angular/forms';
-//import { User } from './user.model';
-//import { UserSignUp } from './user.singup.model';
+import { User } from './user.model';
 
 @Injectable()
 export class UserService {
 
+  authorizedUser: User;
   private url = "api/user";
 
   constructor(private http: HttpClient, private fb: FormBuilder) { }
 
-  formModel = this.fb.group({
+  loginFormModel = this.fb.group({
+    Email: ['', Validators.email],
+    Password: ['', [Validators.required, Validators.minLength(6)]]
+  });
+
+  registerFormModel = this.fb.group({
     UserName: ['', Validators.required],
     Email: ['', Validators.email],
     FirstName: [''],
@@ -21,7 +26,7 @@ export class UserService {
       Password: ['', [Validators.required, Validators.minLength(6)]],
       ConfirmPassword: ['', Validators.required]
     }, {validator: this.comparePasswords }),
-    Roles: [[]]
+    Roles: []
   });
 
   //rolesCheck(fb: FormGroup) {
@@ -38,10 +43,10 @@ export class UserService {
        else
         confirmedPassword.setErrors(null);
     }
-
   }
 
   getRoles() {
+    console.log('get roles');
     return this.http.get(this.url + '/GetRoles');
   }
 
@@ -52,24 +57,34 @@ export class UserService {
   // register
   SignUpUser() {
     var body = {
-      Email: this.formModel.value.Email,
-      UserName: this.formModel.value.UserName,
-      FirstName: this.formModel.value.FirstName,
-      SecondName: this.formModel.value.SecondName,
-      LastName: this.formModel.value.LastName,
-      Password: this.formModel.value.Passwords.Password,
-      Roles: this.formModel.value.Roles
+      Email: this.registerFormModel.value.Email,
+      UserName: this.registerFormModel.value.UserName,
+      FirstName: this.registerFormModel.value.FirstName,
+      SecondName: this.registerFormModel.value.SecondName,
+      LastName: this.registerFormModel.value.LastName,
+      Password: this.registerFormModel.value.Passwords.Password,
+      Roles: this.registerFormModel.value.Roles['Roles']
     }
-    console.log(body);
+    //console.log(body);
     return this.http.post(this.url + '/registration', body);
   }
 
   // login
-  SignInUser(user: NgForm) {
-    return this.http.post(this.url, user);
+  SignInUser() {
+    var body = {
+      Email: this.loginFormModel.value.Email,
+      Password: this.loginFormModel.value.Password
+    }
+    console.log('signIn: ', body);
+    return this.http.post(this.url + '/login', body);
   }
 
   updateUser(user: NgForm) {
     return this.http.put(this.url, user);
+  }
+
+  isMatch(roles: string[]): boolean {
+
+    return true;
   }
 }

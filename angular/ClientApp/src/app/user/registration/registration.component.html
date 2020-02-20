@@ -1,22 +1,22 @@
-<form [formGroup]="userService.formModel" autocomplete="off" (submit)="onSubmit(userService.formModel)">
+<form [formGroup]="userService.registerFormModel" autocomplete="off" (submit)="onSubmit(userService.registerFormModel)">
 
   <div class="form-group required">
     <label>Email</label>
     <input class="form-control" formControlName="Email" />
-    <label class="text-danger" *ngIf="userService.formModel.get('Email').touched
-           && userService.formModel.get('Email').errors?.required">
+    <label class="text-danger" *ngIf="userService.registerFormModel.get('Email').touched
+           && userService.registerFormModel.get('Email').errors?.required">
       Email is required
     </label>
-    <label class="text-danger" *ngIf="userService.formModel.get('Email').touched
-           && userService.formModel.get('Email').errors?.email">
+    <label class="text-danger" *ngIf="userService.registerFormModel.get('Email').touched
+           && userService.registerFormModel.get('Email').errors?.email">
       Email isn`t valid
     </label>
   </div>
   <div class="form-group required">
     <label>Username</label>
     <input class="form-control" formControlName="UserName" />
-    <label class="text-danger" *ngIf="userService.formModel.get('UserName').touched
-           && userService.formModel.get('UserName').errors?.required">
+    <label class="text-danger" *ngIf="userService.registerFormModel.get('UserName').touched
+           && userService.registerFormModel.get('UserName').errors?.required">
       UserName is required
     </label>
   </div>
@@ -36,24 +36,24 @@
     <div class="form-group required">
       <label>Password</label>
       <input type="password" class="form-control" formControlName="Password" />
-      <label class="text-danger" *ngIf="userService.formModel.get('Passwords.Password').touched
-           && userService.formModel.get('Passwords.Password').errors?.required">
+      <label class="text-danger" *ngIf="userService.registerFormModel.get('Passwords.Password').touched
+           && userService.registerFormModel.get('Passwords.Password').errors?.required">
         Password is required
       </label>
-      <label class="text-danger" *ngIf="userService.formModel.get('Passwords.Password').touched
-           && userService.formModel.get('Passwords.Password').errors?.minlength">
+      <label class="text-danger" *ngIf="userService.registerFormModel.get('Passwords.Password').touched
+           && userService.registerFormModel.get('Passwords.Password').errors?.minlength">
         Password min length is 6
       </label>
     </div>
     <div class="form-group required">
       <label>Password confirmation</label>
       <input type="password" class="form-control" formControlName="ConfirmPassword" />
-      <label class="text-danger" *ngIf="userService.formModel.get('Passwords.ConfirmPassword').touched
-           && userService.formModel.get('Passwords.ConfirmPassword').errors?.required">
+      <label class="text-danger" *ngIf="userService.registerFormModel.get('Passwords.ConfirmPassword').touched
+           && userService.registerFormModel.get('Passwords.ConfirmPassword').errors?.required">
         Password confiramation is required
       </label>
-      <label class="text-danger" *ngIf="userService.formModel.get('Passwords.ConfirmPassword').touched
-           && userService.formModel.get('Passwords.ConfirmPassword').errors?.passwordMismatch">
+      <label class="text-danger" *ngIf="userService.registerFormModel.get('Passwords.ConfirmPassword').touched
+           && userService.registerFormModel.get('Passwords.ConfirmPassword').errors?.passwordMismatch">
         Confirmed password isn`t match
       </label>
     </div>
@@ -70,7 +70,7 @@
 
   <div class="form-row">
     <div class="form-group col-mb-8 offset-mb-2">
-      <button type="submit" class="btn bt-lg btn-block" [disabled]="userService.formModel.invalid">Login</button>
+      <button type="submit" class="btn bt-lg btn-block" [disabled]="userService.registerFormModel.invalid">Register</button>
     </div>
   </div>
 

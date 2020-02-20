@@ -1,0 +1,28 @@
+<header class="header-login-signup">
+  <div class="header-limiter">
+    <h1><a href="/">Home</a></h1>
+    <ng-template [ngIf]="userService.authorizedUser != undefined" [ngIfElse]="Login">
+      <ul>
+        <li>
+          <div>
+            <!--"Guest icon"-->
+            {{userService.authorizedUser.UserName}}
+          </div>
+        </li>
+        <li><a href="/user/login">Login</a></li>
+      </ul>
+    </ng-template>
+  </div>
+</header>
+
+<ng-template #Login>
+  <ul>
+    <li>
+      <div>
+        Guest
+      </div>
+    </li>
+    <li><a href="/user/login">Login</a></li>
+  </ul>
+</ng-template>
+

@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../shared/user.service';
 import { FormGroup, FormBuilder, FormArray, FormControl, Validators, ReactiveFormsModule} from '@angular/forms';
-import { type } from 'os';
+import { HttpRequest } from '@angular/common/http';
+import { catchError } from 'rxjs/operators';
 
 @Component({
   selector: 'registration',
@@ -14,26 +15,43 @@ export class RegistrationComponent implements OnInit{
   rolesForm: FormGroup;
 
   constructor(public userService: UserService, private fb: FormBuilder) {
+
+    this.userService.getRoles().subscribe((req: string[]) => {
+      this.roles = req;
+    });
+
     this.rolesForm = this.fb.group({
       Roles: this.fb.array([], Validators.required)
     })
-    this.userService.getRoles().subscribe((res: string[]) => {
-      this.roles = res;
-    });
     
   }
 
   ngOnInit(): void {
+    this.userService.registerFormModel.reset();
     console.log('registration init');
   }
 
+    //this.userService.SignUpUser().subscribe(
+    //  req => { console.log('RESPONSE', req); }
+    //);
+
   onSubmit() {
     console.log('registration submitted');
-    this.userService.formModel.controls['Roles'].setValue(this.rolesForm.value);
-    this.userService.SignUpUser();
-    //console.log('Roles:', this.userService.formModel.get('Roles').value);
-    //console.log('roles:', this.rolesForm.value);
+    this.userService.registerFormModel.controls['Roles'].setValue(this.rolesForm.value);
+
+    this.userService.SignUpUser().subscribe(
+      (res: any) => {
+        console.log('RESPONSE OK');
+        //window.alert('Succsesful registration');
+        this.userService.registerFormModel.reset();
+      },
+      err => {
+        window.alert(err.error.message);
+        console.log('RESPONSE ERROR', err);
+      }
+    );
   }
+
 
   onCheckboxChange(e) {
     const Roles: FormArray = this.rolesForm.get('Roles') as FormArray;

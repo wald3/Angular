@@ -49,24 +49,37 @@ namespace angular.Controllers
         // POST: api/User/Registration
         public object Registration([FromBody]RegistrationModel model)
         {
-            var user = new User
+            if (model != null)
             {
-                UserName = model.UserName,
-                FirstName = model.FirstName,
-                SecondName = model.SecondName,
-                LastName = model.LastName,
-                Password = model.Password,
-                Email = model.Email,
-                RegistrationDate = DateTime.UtcNow.ToString()
-            };
-            var isCreated = _userManager.CreateUser(user);
+                var user = new User
+                {
+                    UserName = model.UserName,
+                    FirstName = model.FirstName,
+                    SecondName = model.SecondName,
+                    LastName = model.LastName,
+                    Password = model.Password,
+                    Email = model.Email,
+                    RegistrationDate = DateTime.UtcNow.ToString()
+                };
 
-            if (isCreated)
-            {
-                _userManager.AddToRoles(user.Email, model.Roles.ToList());
-                return Ok(_userManager.GetByEmail(user.Email));
+                try
+                {
+                    var isCreated = _userManager.CreateUser(user);
+                    if (!isCreated)
+                    {
+                        return BadRequest(new { message = "User with such [Email] or [UserName] already exists" });
+                    }
+                    _userManager.AddToRoles(user.Email, model.Roles.ToList());
+                    return Ok(_userManager.GetByEmail(user.Email));
+                }
+                catch(Exception e)
+                {
+                    throw e;
+                }
+          
             }
-            return BadRequest(new { message = "User already exists" });
+            return BadRequest(new { message = "Bad model json" });
+
         }
 
         [HttpPost("[action]")]
@@ -78,7 +91,8 @@ namespace angular.Controllers
             {
                 var tokenDescriptor = new SecurityTokenDescriptor
                 {
-                    Subject = new ClaimsIdentity(new Claim[]{
+                    Subject = new ClaimsIdentity(new Claim[]
+                    {
                         new Claim("UserId", user.Id.ToString())
                     }),
                     Expires = DateTime.UtcNow.AddMinutes(2),

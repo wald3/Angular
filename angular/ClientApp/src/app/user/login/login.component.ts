@@ -12,7 +12,7 @@ export class LoginComponent implements OnInit{
     Password: ''
   }
 
-  constructor(private service: UserService) {
+  constructor(private userService: UserService) {
 
   }
 
@@ -21,6 +21,7 @@ export class LoginComponent implements OnInit{
   }
 
   onSubmit() {
+    this.userService.SignInUser();
     console.log('login submitted');
   }
 
