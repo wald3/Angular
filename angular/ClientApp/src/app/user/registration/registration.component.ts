@@ -3,6 +3,7 @@ import { UserService } from '../../shared/user.service';
 import { FormGroup, FormBuilder, FormArray, FormControl, Validators, ReactiveFormsModule} from '@angular/forms';
 import { HttpRequest } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'registration',
@@ -10,11 +11,16 @@ import { catchError } from 'rxjs/operators';
   styles: []
 })
 export class RegistrationComponent implements OnInit{
-  roles: string[] = [];
+  roles: string[];
   public isRolesValid: boolean = true;
   rolesForm: FormGroup;
 
-  constructor(public userService: UserService, private fb: FormBuilder) {
+  constructor(public userService: UserService, private fb: FormBuilder, private router: Router) {
+
+  }
+
+  ngOnInit(): void {
+    this.userService.registerFormModel.reset();
 
     this.userService.getRoles().subscribe((req: string[]) => {
       this.roles = req;
@@ -23,17 +29,9 @@ export class RegistrationComponent implements OnInit{
     this.rolesForm = this.fb.group({
       Roles: this.fb.array([], Validators.required)
     })
-    
-  }
 
-  ngOnInit(): void {
-    this.userService.registerFormModel.reset();
-    console.log('registration init');
+    //console.log('registration init');
   }
-
-    //this.userService.SignUpUser().subscribe(
-    //  req => { console.log('RESPONSE', req); }
-    //);
 
   onSubmit() {
     console.log('registration submitted');
@@ -42,12 +40,28 @@ export class RegistrationComponent implements OnInit{
     this.userService.SignUpUser().subscribe(
       (res: any) => {
         console.log('RESPONSE OK');
-        //window.alert('Succsesful registration');
-        this.userService.registerFormModel.reset();
+        this.userService.loginFormModel.get('Email').setValue(this.userService.registerFormModel.get('Email').value);
+        this.userService.loginFormModel.get('Password').setValue(this.userService.registerFormModel.get('Passwords.Password').value);
+
+        this.userService.SignInUser().subscribe(
+          (res: any) => {
+            console.log('result login submit', res.user);
+            localStorage.setItem('jwt_token', res.token);
+
+            this.userService.loginFormModel.reset();
+            this.userService.registerFormModel.reset();
+            this.router.navigateByUrl('/profile');
+          },
+          err => {
+            window.alert(err.error.message);
+            console.log('LOGIN RESPONSE ERROR');
+          }
+        );
+
       },
       err => {
         window.alert(err.error.message);
-        console.log('RESPONSE ERROR', err);
+        console.log('REGISTR RESPONSE ERROR', err);
       }
     );
   }

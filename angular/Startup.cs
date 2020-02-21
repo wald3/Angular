@@ -8,7 +8,9 @@ using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using NLog;
 using System;
+using System.IO;
 using System.Text;
 
 namespace angular

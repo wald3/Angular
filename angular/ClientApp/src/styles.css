@@ -1,8 +1,31 @@
-
-
   body {
     background-color: #04c582 !important;
   }
+
+.loading{
+    margin: auto !important;
+
+}
+
+.profile-button {
+  padding-top: 20px;
+}
+
+.img-edit {
+  display: flex;
+  align-items: flex-start;
+}
+
+.list-group-item {
+  width: 50%;
+}
+
+li input.form-control {
+  background-color: #04c582;
+  color: #fff;
+  border: 1px solid #636b7b;
+  padding-right: 40px;
+}
 
   input.form-control, input.form-control:focus {
     background-color: #636b7b;

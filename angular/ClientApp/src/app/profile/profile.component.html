@@ -1,2 +1,79 @@
 
+  <ng-template [ngIf]="userService.isMatch('Admin')">
+    <ul>
+      <div class="profile-button">
+        <h2>View for Admin role only</h2>
+        <input type="button" value="View users actions" class="btn btn-warning" (click)="switchView()" />
+      </div>
+      <ng-template [ngIf]="isAdminView">
+        <div class="card border-light mb-5" style="max-width: 50rem;">
+            <p class="card-text">{{userInfo}}</p>
+      </ng-template>
+    </ul>
+  </ng-template>
 
+
+<ng-template #Profile [ngIf]="!isEditActive" [ngIfElse]="Edit">
+  
+  <div class="card-m-5">
+
+    <ul class="list=group">
+      <h2>View for [User] role only</h2>
+      <li class="list-group-item"><strong>Email: </strong>{{userDetails?.email}}</li>
+      <li class="list-group-item"><strong>UserName: </strong>{{userDetails?.userName}}</li>
+      <li class="list-group-item"><strong>First Name: </strong>{{userDetails?.firstName}}</li>
+      <li class="list-group-item"><strong>Second Name: </strong>{{userDetails?.secondName}}</li>
+      <li class="list-group-item"><strong>Last Name: </strong>{{userDetails?.lastName}}</li>
+      <li class="list-group-item"><strong>Roles: </strong>{{userDetails?.roles}}</li>
+      <li class="list-group-item"><strong>Registration Date: </strong>{{userDetails?.registrationDate}}</li>
+      <div class="profile-button">
+        <input type="button" value="Edit" class="btn btn-warning" (click)="edit()" />
+      </div>
+    </ul>
+  </div>
+</ng-template>
+
+<ng-template #Edit>
+  <div class="card-m-5">
+    <ul class="list=group">
+      <li class="list-group-item"><strong>UserName: </strong>{{userDetails?.userName}}</li>
+      <li class="list-group-item"><strong>Email: </strong>{{userDetails?.email}}</li>
+      <li class="list-group-item">
+        <strong>First Name: </strong>
+        <div class="img-edit">
+          <input type="text" [(ngModel)]="userDetails.firstName" class="form-control" />
+          <img src="./assets/edit_icon.png" width="20" />
+        </div>
+      </li>
+      <li class="list-group-item">
+        <strong>Second Name: </strong>
+        <div class="img-edit">
+          <input type="text" [(ngModel)]="userDetails.secondName" class="form-control" />
+          <img src="./assets/edit_icon.png" width="20" />
+        </div>
+      </li>
+      <li class="list-group-item">
+        <strong>Last Name: </strong>
+        <div class="img-edit">
+          <input type="text" [(ngModel)]="userDetails.lastName" class="form-control" />
+          <img src="./assets/edit_icon.png" width="20" />
+        </div>
+      </li>
+      <li class="list-group-item">
+        <strong>Roles: </strong>
+        {{userDetails?.roles == [] ? 'None' :  userDetails?.roles}}
+        <div *ngFor="let r of roles">
+          <label class="check-box-label">
+            <input type="checkbox" [value]="r" (change)="onCheckboxChange($event)" />
+            {{r}}
+          </label>
+        </div>
+      </li>
+      <li class="list-group-item"><strong>Registration Date: </strong>{{userDetails?.registrationDate}}</li>
+      <div class="profile-button">
+        <input type="button" value="Save" (click)="save()" class="btn btn-sm btn-primary" />
+        <input type="button" value="Cancel" (click)="cancel()" class="btn btn-sm btn-warning" />
+      </div>
+    </ul>
+  </div>
+</ng-template>

@@ -13,6 +13,9 @@ import { UserService } from './shared/user.service';
 import { HeaderComponent } from './header/header.component';
 import { ProfileComponent } from './profile/profile.component';
 import { AuthInterceptor } from './auth/auth.interceptor';
+import { AuthGuard } from './auth/auth.guard';
+import { NotFoundComponent } from './status/not-found/not-found.component';
+import { ForbiddenComponent } from './status/forbidden/forbidden.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +25,8 @@ import { AuthInterceptor } from './auth/auth.interceptor';
     UserComponent,
     LoginComponent,
     ProfileComponent,
+    ForbiddenComponent,
+    NotFoundComponent,
     RegistrationComponent
   ],
   imports: [
@@ -31,24 +36,25 @@ import { AuthInterceptor } from './auth/auth.interceptor';
     FormsModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
+      { path: 'profile', component: ProfileComponent, canActivate:[AuthGuard] },
       {
-        path: 'user', component: UserComponent,
+        path: 'user', component: UserComponent, 
         children: [
           { path: 'login', component: LoginComponent },
           { path: 'registration', component: RegistrationComponent }
         ]
       },
-        { path: 'profile', component: ProfileComponent },
-      ])
+      { path: '**', component: NotFoundComponent }
+    ])
   ],
   providers: [
-    UserService
-    //UserService,
-    //{
-    //  provide: HTTP_INTERCEPTORS,
-    //  useClass: AuthInterceptor,
-    //  multi: true
-    //}
+    UserService,
+    AuthGuard,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }
   ],
   bootstrap: [AppComponent]
 })

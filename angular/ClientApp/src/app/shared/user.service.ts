@@ -1,12 +1,13 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { NgForm, FormBuilder, Validators, FormGroup, FormControlName } from '@angular/forms';
 import { User } from './user.model';
+import { forEach } from '@angular/router/src/utils/collection';
 
 @Injectable()
 export class UserService {
 
-  authorizedUser: User;
+  username: string = null;
   private url = "api/user";
 
   constructor(private http: HttpClient, private fb: FormBuilder) { }
@@ -45,9 +46,18 @@ export class UserService {
     }
   }
 
+  getUsersActionInfo() {
+    return this.http.get(this.url + '/GetUsersActionInfo');
+  }
+
+
   getRoles() {
     console.log('get roles');
     return this.http.get(this.url + '/GetRoles');
+  }
+
+  getUser(id) {
+    return this.http.get(this.url);
   }
 
   getUsers() {
@@ -75,16 +85,24 @@ export class UserService {
       Email: this.loginFormModel.value.Email,
       Password: this.loginFormModel.value.Password
     }
-    console.log('signIn: ', body);
+    //console.log('signIn: ', body);
     return this.http.post(this.url + '/login', body);
   }
 
-  updateUser(user: NgForm) {
-    return this.http.put(this.url, user);
+  updateUser(body) {
+    return this.http.put(this.url +'/UpdateProfile', body);
   }
 
-  isMatch(roles: string[]): boolean {
+  isMatch(role: string): boolean {
+    var userRoles: string[] = JSON.parse(localStorage.getItem('roles'));
+    return userRoles.indexOf(role) > -1;
+  }
 
-    return true;
+  //get user(): any {
+  //  return JSON.parse(localStorage.getItem('user'));
+  //}
+
+  getUserProfile() {
+    return this.http.get(this.url + '/getUserProfile');
   }
 }
